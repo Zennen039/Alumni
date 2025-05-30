@@ -1,0 +1,151 @@
+{% extends 'admin/base_site.html' %}
+
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<h1 style="">THỐNG KÊ THÔNG TIN BÀI ĐĂNG</h1>
+
+<h2>Thống Kê Theo Năm</h2>
+
+<ul>
+    {% for sy in stats_by_year %}
+    <li>Năm {{ sy.year }}: {{ sy.post_count }} bài viết</li>
+    {% endfor %}
+</ul>
+
+<div style="width: 50%;">
+    <canvas id="statsYearChart"></canvas>
+</div>
+
+<script>
+    let data = [];
+    let labels = [];
+
+    {% for sy in stats_by_year %}
+    data.push({{ sy.post_count }})
+
+    labels.push('{{ sy.year }}')
+    {% endfor %}
+
+    window.onload = function() {
+        const ctx = document.getElementById('statsYearChart');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Số bài viết theo năm',
+                data: data,
+                borderWidth: 1,
+                backgroundColor: '#4e73df'
+              }]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+        });
+    }
+</script>
+
+<h2>Thống Kê Theo Tháng</h2>
+
+<ul>
+    {% for sm in stats_by_month %}
+    <li>Tháng {{ sm.month }} / {{ sm.year }}: {{ sm.post_count }} bài viết</li>
+    {% endfor %}
+</ul>
+
+<div style="width: 50%;">
+    <canvas id="statsMonthChart"></canvas>
+</div>
+
+<script>
+    let data = [];
+    let labels = [];
+
+    {% for sm in stats_by_month %}
+    data.push({{ sm.post_count }})
+
+    labels.push('{{ sm.month }} / {{ sm.year }}')
+    {% endfor %}
+
+    window.onload = function() {
+        const ctx = document.getElementById('statsMonthChart');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Số bài viết theo tháng',
+                data: data,
+                borderColor: '#1cc88a',
+                fill: false,
+                tension: 0.3
+              }]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+        });
+    }
+</script>
+
+<h2>Thống Kê Theo Quý</h2>
+
+<ul>
+    {% for sq in stats_by_quarter %}
+    <li>Quý {{ sq.quarter }} năm {{ sq.year }}: {{ sq.post_count }} bài viết</li>
+    {% endfor %}
+</ul>
+
+<div style="width: 50%;">
+    <canvas id="statsQuarterChart"></canvas>
+</div>
+
+<script>
+    let data = [];
+    let labels = [];
+
+    {% for sq in stats_by_quarter %}
+    data.push({{ sq.post_count }})
+
+    labels.push('{{ sq.quarter }} / {{ sq.year }}')
+    {% endfor %}
+
+    window.onload = function() {
+        const ctx = document.getElementById('statsQuarterChart');
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Số bài viết theo quý',
+                data: data,
+                borderWidth: 1,
+                backgroundColor: '#f6c23e'
+              }]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+        });
+    }
+</script>
+
+{% endblock %}
