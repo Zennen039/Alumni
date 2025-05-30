@@ -1,6 +1,6 @@
 from alumni_app.models import User, Post, Comment, Reaction, Survey, SurveyAnswer, NotificationGroup, Event
 from rest_framework import viewsets, generics, status, parsers, permissions
-from alumni_app import serializers, perms
+from alumni_app import serializers, perms, paginators
 from alumni_app.emails import send_email
 from django.utils import timezone
 from rest_framework.decorators import action
@@ -33,6 +33,7 @@ class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):
 class PostViewSet(viewsets.ViewSet, generics.ListCreateAPIView):
     queryset = Post.objects.all().order_by('-created_date')
     serializer_class = serializers.PostSerializer
+    pagination_class = paginators.ItemPaginator
 
     @action(detail=False, methods=['get'])
     def timeline(self, request):
@@ -104,6 +105,7 @@ class ReactionViewSet(viewsets.ViewSet, generics.UpdateAPIView, generics.Destroy
 class SurveyViewSet(viewsets.ViewSet, generics.ListCreateAPIView):
     queryset = Survey.objects.all()
     serializer_class = serializers.SurveySerializer
+    pagination_class = paginators.ItemPaginator
 
     @action(methods=['get', 'post'], detail=True, url_path='answers')
     def get_answers(self, request, pk):
@@ -129,6 +131,7 @@ class SurveyViewSet(viewsets.ViewSet, generics.ListCreateAPIView):
 class SurveyAnswerViewSet(viewsets.ViewSet, generics.ListAPIView):
     queryset = SurveyAnswer.objects.all()
     serializer_class = serializers.AnswerSerializer
+    pagination_class = paginators.ItemPaginator
 
     def get_queryset(self):
         surv_id = self.request.query_params.get('survey_id')
@@ -142,11 +145,13 @@ class SurveyAnswerViewSet(viewsets.ViewSet, generics.ListAPIView):
 class NotificationViewSet(viewsets.ViewSet, generics.ListCreateAPIView, generics.RetrieveUpdateDestroyAPIView):
     queryset = NotificationGroup.objects.all()
     serializer_class = serializers.NotificationSerializer
+    pagination_class = paginators.ItemPaginator
 
 
 class EventViewSet(viewsets.ViewSet, generics.ListCreateAPIView, generics.RetrieveUpdateDestroyAPIView):
     queryset = Event.objects.all()
     serializer_class = serializers.EventSerializer
+    pagination_class = paginators.ItemPaginator
 
     def event_create(self, request, *args, **kwargs):
         evt = serializers.EventSerializer(data=request.data)
