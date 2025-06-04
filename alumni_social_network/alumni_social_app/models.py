@@ -42,6 +42,7 @@ class Post(BaseModel):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, default=False)
     content = RichTextField()
     choice = models.CharField(max_length=30, choices=POST_CHOICES, default='normal')
     image = models.ImageField(upload_to='app/%Y/%m/')

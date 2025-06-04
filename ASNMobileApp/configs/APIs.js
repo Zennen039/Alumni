@@ -9,7 +9,7 @@ export const endpoints = {
     'login': '/o/token/',
     'register': '/users/',
     'current-user': '/users/current-user/',
-    'post-details': (postId) => `/posts/${postId}/`,
+    'post-details': (postId) => `/posts/${postId}/details/`,
     'comments': (postId) => `/posts/${postId}/comments/`,
     'reactions': (postId) => `/posts/${postId}/reactions/`
 };
